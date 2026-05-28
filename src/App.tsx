@@ -15,7 +15,7 @@ function App() {
 }
 
 function handleDeleteExpense(id: string) {
-    setExpenses(expenses.filter(e => e.id !== id));
+    setExpenses(prev => prev.filter(e => e.id !== id));
 }
 
 return (

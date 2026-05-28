@@ -24,6 +24,9 @@ function ExpenseForm({ onAddExpense }: ExpenseFormProps) {
       date: new Date().toISOString().slice(0, 10),
     })
 
+    setDescription("");
+    setAmount("");
+    setCategory("");
   }
 
   return (
