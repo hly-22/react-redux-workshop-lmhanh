@@ -1,9 +1,29 @@
+import { useState } from 'react';
 import { CATEGORIES } from '../constants'
+import type { Expense } from '../types/expense'
 
-function ExpenseForm() {
+type ExpenseFormProps = {
+  onAddExpense: (expense: Omit<Expense, "id">) => void;
+}
+
+function ExpenseForm({ onAddExpense }: ExpenseFormProps) {
+
+  const [description, setDescription] = useState("");
+  const [amount, setAmount] = useState("");
+  const [category, setCategory] = useState("");
+
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     // TODO: create a new expense and add it to the list
+    if (!description || !amount || !category) return;
+
+    onAddExpense({
+      description,
+      amount: parseFloat(amount),
+      category,
+      date: new Date().toISOString().slice(0, 10),
+    })
+
   }
 
   return (
@@ -13,6 +33,8 @@ function ExpenseForm() {
         Name
         <input
           name="description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
           placeholder="e.g. Lunch"
           required
         />
@@ -22,6 +44,8 @@ function ExpenseForm() {
         <input
           name="amount"
           type="number"
+          value={amount}
+          onChange={(e) => setAmount(e.target.value)}
           placeholder="0.00"
           min={0}
           step="0.01"
@@ -30,7 +54,7 @@ function ExpenseForm() {
       </label>
       <label>
         Category
-        <select name="category" required>
+        <select name="category" value={category} onChange={(e) => setCategory(e.target.value)} required>
           <option value="">Select category</option>
           {CATEGORIES.map(c => (
             <option key={c} value={c}>{c}</option>

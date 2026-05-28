@@ -5,21 +5,30 @@ import ExpenseList from './components/ExpenseList'
 import './App.css'
 
 function App() {
-  const [expenses] = useState<Expense[]>([])
+  const [expenses, setExpenses] = useState<Expense[]>([])
 
   // TODO: add handleAddExpense and handleDeleteExpense
+  function handleAddExpense(expense: Omit<Expense, "id">) {
+    setExpenses(prev =>
+      [...prev, { ...expense, id: crypto.randomUUID() }]
+    )
+}
 
-  return (
-    <div className="app-layout">
-      <aside>
-        <h1>Expense Manager</h1>
-        <ExpenseForm />
-      </aside>
-      <main>
-        <ExpenseList expenses={expenses} />
-      </main>
-    </div>
-  )
+function handleDeleteExpense(id: string) {
+    setExpenses(expenses.filter(e => e.id !== id));
+}
+
+return (
+  <div className="app-layout">
+    <aside>
+      <h1>Expense Manager</h1>
+      <ExpenseForm onAddExpense={handleAddExpense} />
+    </aside>
+    <main>
+      <ExpenseList expenses={expenses} onDeleteExpense={handleDeleteExpense}/>
+    </main>
+  </div>
+)
 }
 
 export default App
